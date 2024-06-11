@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Description = @"JWT Authorization header usando o schema Bearer
                        \r\n\r\n Informe 'Bearer'[space].
-                       Examplo: \'Bearer 12345abcdef\'",
+                       Exemplo: \'Bearer 12345abcdef\'",
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
