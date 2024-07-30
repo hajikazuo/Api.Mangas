@@ -1,10 +1,12 @@
 ﻿using Api.Mangas.DTOs;
 using Api.Mangas.Entities;
+using Api.Mangas.Extensions;
 using Api.Mangas.Repositories.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Mangas.Controllers
 {
@@ -23,11 +25,36 @@ namespace Api.Mangas.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("paginacao")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<MangaDTO>>> GetMangasPaginacao([FromQuery]
+                                                    Paginacao paginacao)
+        {
+            var mangasPaginados = _mangaRepository.GetMangasQueryable();
+
+            if (mangasPaginados is null)
+            {
+                return NotFound("Nenhum mangá encontrado");
+            }
+
+            double quantidadeRegistrosTotal = await mangasPaginados.CountAsync();
+            double totalPaginas = Math.Ceiling(quantidadeRegistrosTotal / paginacao.QuantidadePorPagina);
+
+            var result = await mangasPaginados.Paginar(paginacao).ToListAsync();
+            var mangasDto = _mapper.Map<IEnumerable<MangaDTO>>(result);
+
+            var response = new MangaPaginacaoResponseDTO
+            {
+                Mangas = mangasDto.ToList(),
+                TotalPaginas = (int)totalPaginas
+            };
+
+            return Ok(response);
+        }
+
+
         [HttpGet]
-        // Atributos de ação que fornecem informações sobre os possíveis códigos de status HTTP
-        // que podem ser retornados pelo endpoint da Web API.
-        // Esses atributos indicam os códigos de status de resposta esperados para esse endpoint
-        // específico e ajudam a documentar e definir a semântica da API
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {

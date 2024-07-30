@@ -8,6 +8,8 @@ namespace Api.Mangas.Repositories.Interfaces
         GetMangasPorCategoriaAsync(int categoriaId);
 
         Task<IEnumerable<Manga>>
-            LocalizaMangaComCategoriaAsync(string criterio);
+        LocalizaMangaComCategoriaAsync(string criterio);
+
+        IQueryable<Manga> GetMangasQueryable();
     }
 }

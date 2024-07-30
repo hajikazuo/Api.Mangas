@@ -22,5 +22,6 @@ builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStatePr
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IMangaService, MangaService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();    
 
 await builder.Build().RunAsync();

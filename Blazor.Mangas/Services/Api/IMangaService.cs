@@ -10,5 +10,6 @@ namespace Blazor.Mangas.Services.Api
         Task<MangaDTO> UpdateManga(int id, MangaDTO mangaDto);
         Task<bool> DeleteManga(int id);
         Task<IEnumerable<MangaDTO>> GetMangasPorCategoria(int id);
+        Task<MangaPaginacaoResponseDTO> GetMangasPaginacao(int pagina, int quantidadePorPagina);
     }
 }
