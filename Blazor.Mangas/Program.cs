@@ -1,5 +1,6 @@
 using Blazor.Mangas;
 using Blazor.Mangas.Services.Api;
+using Blazor.Mangas.Services.Api.Interfaces;
 using Blazor.Mangas.Services.Authentication;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;

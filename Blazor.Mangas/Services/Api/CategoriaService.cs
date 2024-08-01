@@ -1,4 +1,5 @@
 ﻿using Blazor.Mangas.Models.DTOs;
+using Blazor.Mangas.Services.Api.Interfaces;
 using System.Net.Http.Json;
 
 namespace Blazor.Mangas.Services.Api

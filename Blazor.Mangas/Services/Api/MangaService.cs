@@ -1,4 +1,5 @@
 ﻿using Blazor.Mangas.Models.DTOs;
+using Blazor.Mangas.Services.Api.Interfaces;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
@@ -105,9 +106,33 @@ namespace Blazor.Mangas.Services.Api
             }
         }
 
-        public Task<IEnumerable<MangaDTO>> GetMangasPorCategoria(int id)
+        public async Task<IEnumerable<MangaDTO>> GetMangasPorCategoria(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient("ApiMangas");
+                var response = await httpClient.GetAsync(apiEndpoint + "get-mangas-by-category/" + id);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<MangaDTO>>();
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    _logger.LogError($"Erro ao obter os mangás pelo id= {id} - {message}");
+                    throw new Exception($"Status Code : {response.StatusCode} - {message}");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao obter os mangás pelo id={id} \n\n {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<MangaDTO> CreateManga(MangaDTO mangaDto)
@@ -178,5 +203,29 @@ namespace Blazor.Mangas.Services.Api
             return false;
         }
 
+        public async Task<IEnumerable<MangaDTO>> GetMangasPorTitulo(string titulo)
+        {
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient("ApiMangas");
+                var response = await httpClient.GetAsync(apiEndpoint + "search/" + titulo);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<MangaDTO>>();
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    _logger.LogError($"Erro ao obter mangás com titulo {titulo} - {message}");
+                    throw new Exception($"Status Code : {response.StatusCode} - {message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao obter o mangá pelo titulo={titulo} \n\n {ex.Message}");
+                throw;
+            }
+        }
     }
 }

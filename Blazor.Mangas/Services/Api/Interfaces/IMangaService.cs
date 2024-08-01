@@ -1,6 +1,6 @@
 ﻿using Blazor.Mangas.Models.DTOs;
 
-namespace Blazor.Mangas.Services.Api
+namespace Blazor.Mangas.Services.Api.Interfaces
 {
     public interface IMangaService
     {
@@ -10,6 +10,7 @@ namespace Blazor.Mangas.Services.Api
         Task<MangaDTO> UpdateManga(int id, MangaDTO mangaDto);
         Task<bool> DeleteManga(int id);
         Task<IEnumerable<MangaDTO>> GetMangasPorCategoria(int id);
+        Task<IEnumerable<MangaDTO>> GetMangasPorTitulo(string titulo);
         Task<MangaPaginacaoResponseDTO> GetMangasPaginacao(int pagina, int quantidadePorPagina);
     }
 }

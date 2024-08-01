@@ -71,7 +71,6 @@ namespace Api.Mangas.DTOs
         [Range(1, 999)]
         public int Estoque { get; set; }
 
-        [JsonIgnore]
         public Categoria? Categoria { get; set; }
 
         [DisplayName("Categorias")]

@@ -25,6 +25,16 @@ namespace Api.Mangas.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("search/{mangaTitulo}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<MangaDTO>>> Search(string mangaTitulo)
+        {
+            var mangas = await _mangaRepository.SearchAsync(m => m.Titulo.Contains(mangaTitulo));
+            return Ok(_mapper.Map<IEnumerable<MangaDTO>>(mangas));  
+        }
+
         [HttpGet("paginacao")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -124,20 +134,6 @@ namespace Api.Mangas.Controllers
             if (manga is null) return NotFound();
             await _mangaRepository.RemoveAsync(manga.Id);
             return Ok();
-        }
-
-        [HttpGet]
-        [Route("search/{mangaTitulo}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<MangaDTO>>> Search(string mangaTitulo)
-        {
-            var mangas = await _mangaRepository.SearchAsync(m => m.Titulo.Contains(mangaTitulo));
-
-            if (mangas is null)
-                return NotFound("Nenhum mangá foi encontrado");
-
-            return Ok(_mapper.Map<IEnumerable<MangaDTO>>(mangas));
         }
 
         [HttpGet]

@@ -1,4 +1,6 @@
 ﻿
+using Blazor.Mangas.Services.Api.Interfaces;
+
 namespace Blazor.Mangas.Services.Api
 {
     public class FileUploadService : IFileUploadService
